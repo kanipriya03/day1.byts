@@ -1,0 +1,166 @@
+1.REVERSE PAIRS(LEETCODE:493)
+
+class Solution{
+    public int reversePairs(int[] nums){
+        return mergeCount(nums,0,nums.length-1);
+    }
+    static int mergeCount(int[] nums,int low,int high){
+        if(low>=high)
+        return 0;
+        int mid=(low+high)/2;
+        int count=mergeCount(nums,low,mid);
+        count+=mergeCount(nums,mid+1,high);
+        count+=merge(nums,low,mid,high);
+        return count;
+    }
+    static int merge (int[] nums,int low,int mid,int high){
+        int count =0,j=mid+1;
+        for(int i=low;i<=mid;i++){
+            while(j<=high && nums[i]>(2*(long)nums[j])){
+                j++;
+            }
+            count +=(j-(mid+1));
+        }
+        ArrayList<Integer>temp=new ArrayList<Integer>();
+        int left=low,right=mid+1;
+        while(left <= mid&& right<=high){
+            if(nums[left]<=nums[right]){
+                temp.add(nums[left++]);
+            }
+            else{
+                temp.add(nums[right++]);
+            }
+        }
+        while(left <= mid){
+            temp.add(nums[left++]);
+        }
+        while(right<=high){
+            temp.add(nums[right++]);
+        }
+        for(int i=low;i<=high;i++){
+            nums[i]=temp.get(i-low);
+        }
+        return count;
+    }
+}
+-----------------------------------------------------------------------------------------------------------------------------
+2.UNIQUE PATH(LEETCODE NO:62)
+
+class Solution {
+    public int uniquePaths(int m, int n) {
+    int N=n+m-2;
+    int r= m-1;
+    double res=1;
+    for(int i=1;i<=r;i++){
+        res=res*(N-r+i)/i;
+    }
+    return (int)res;
+    }
+}
+-------------------------------------------------------------------------------------------------------------------------------
+
+
+3.LONGEST CONSECUTIVE SEQUENCE(LEETCODE NO:128)
+
+class Solution {
+    public int longestConsecutive(int[] nums) {
+        Set<Integer>hashSet=new HashSet<>();
+        for(int num:nums){
+            hashSet.add(num);
+        }
+        int maxLen =0;
+        for(int num:nums){
+            if(!hashSet.contains(num-1)){
+                int currentNum = num;
+                int currentLen =1;
+                while(hashSet.contains(currentNum+1)){
+                    currentNum+=1;
+                    currentLen+=1;
+                }
+                maxLen=Math.max(maxLen,currentLen);
+            }
+        }
+        return maxLen;
+    }
+}
+----------------------------------------------------------------------------------------------------------------------------------
+4.COUNT PAIRS(GFG PRACTICE)
+
+class Solution {
+
+    int getPairsCount(int[] arr, int n, int k) {
+
+        // code here
+
+           int ans = 0;
+
+        HashMap<Integer,Integer> map = new HashMap<>();
+
+        for(int i = 0;i<n ;i++){
+
+            if(map.containsKey(k-arr[i])){
+
+             ans+= map.get(k-arr[i]);
+
+            }
+
+             if(map.containsKey(arr[i])){
+
+             map.put(arr[i],map.get(arr[i])+1);
+
+        }
+
+        else{
+
+            map.put(arr[i],1);
+
+            }
+
+        }
+
+        return ans;
+
+   }
+
+}
+----------------------------------------------------------------------------------------------------------------------------
+5.MERGE SORT(GFG PRACTICE)
+
+class Solution
+{
+    void merge(int arr[], int l, int m, int r)
+    {
+       
+        int i = l, j = m+1, ci = 0;
+        int temp[] = new int[r - l + 1];
+        while(i <= m && j <= r){
+            if(arr[i] <= arr[j]){
+                temp[ci++] = arr[i++];
+            }else {
+                temp[ci++] = arr[j++];
+            }
+        }
+        while(i <= m ){
+            temp[ci++] = arr[i++];
+        }
+        while(j <= r){
+            temp[ci++] = arr[j++];
+        }
+        for(int k = 0; k < temp.length; k++){
+            arr[l + k] = temp[k];
+        }
+         
+    }
+    void mergeSort(int arr[], int l, int r)
+    {
+       
+        if(r > l){
+            int m = l + (r - l) /2; 
+            mergeSort(arr, l, m );
+            mergeSort(arr, m + 1, r);
+            merge(arr, l, m, r);
+        }
+    }
+}
+
+
